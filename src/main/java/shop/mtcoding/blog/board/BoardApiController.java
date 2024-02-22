@@ -2,7 +2,9 @@ package shop.mtcoding.blog.board;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,5 +24,16 @@ public class BoardApiController { // api를 돌려주는 컨트롤러(ajax 통�
         return new ApiUtil<>(boardList);// MessageConverter가 발동됨. 제이슨으로 바뀌어서 날아간다 이 말이다.
     }
 
+    @DeleteMapping("/api/boards/{id}")
+    public ApiUtil<?> deleteById(@PathVariable Integer id, HttpServletResponse response) {
+
+        Board board = boardRepository.selectOne(id);
+        if (board == null) {
+            response.setStatus(404);
+            return new ApiUtil<>(404, "해당 게시글을 찾을 수 없습니다.");
+        }
+        boardRepository.deleteById(id);
+        return new ApiUtil<>(null);
+    }
 
 }

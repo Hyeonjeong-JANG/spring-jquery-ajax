@@ -19,6 +19,20 @@
 
 </div>
 <script>
+
+    function del(boardId) {
+        $.ajax({
+            url: `/api/boards/${boardId}`,
+            type: "delete"
+        }).done((res) => {
+            $(`#board-${boardId}`).remove();
+        }).fail((res) => {
+            alert(res.responseJSON.msg);
+            location.reload(); // 강제 f5
+        });
+    }
+
+    // 아래의 ajax는 무조건 실행되어야 하니까 밖에 있다
     $.ajax({
         url: "/api/boards",
         type: "get"
